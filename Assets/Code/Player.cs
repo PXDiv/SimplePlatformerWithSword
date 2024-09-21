@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Unity.Mathematics;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -223,6 +224,9 @@ public class Player : MonoBehaviour
         isKnockedBack = false;
     }
     //---------------------------
+
+    //Teleportation Ball System
+
     public void ThrowTeleportationBall()
     {
         // Instantiate the ball at the player's position
@@ -263,4 +267,32 @@ public class Player : MonoBehaviour
             }
         }
     }
+    //---------------------------
+
+
+    // Level Systems -------------------------------------
+
+    public int[] xpForNextLevel;
+    public void GainExperience(int exp)
+    {
+        playerExp += exp;
+        CheckLevelUp();
+    }
+
+    void CheckLevelUp()
+    {
+        if (playerLevel < xpForNextLevel.Length && playerExp >= xpForNextLevel[playerLevel - 1])
+        {
+            playerExp -= xpForNextLevel[playerLevel - 1];
+            playerLevel++;
+            OnLevelUp();
+        }
+    }
+
+    private void OnLevelUp()
+    {
+        throw new NotImplementedException();
+    }
+
+    //---------------------------------------------
 }
