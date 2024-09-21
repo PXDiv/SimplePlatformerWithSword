@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.Mathematics;
-using System;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -25,7 +22,7 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
 
     [SerializeField] Rigidbody2D rb;
-    [SerializeField] Animator animator;
+    [SerializeField] Animator animator, swordAnimator;
     [SerializeField] TMP_Text debugText;
     [SerializeField] GameObject sword;
 
@@ -34,7 +31,6 @@ public class Player : MonoBehaviour
     private float moveInput;
     Vector2 playerScaleStart;
     private GameMan gameManager;
-
 
     public float knockbackForce = 10f; // Knockback force to be applied
     public float knockbackDuration = 0.2f; // Duration of the knockback effect
@@ -52,12 +48,17 @@ public class Player : MonoBehaviour
     public float pathTime = 2f; // Duration for the path prediction
     private bool isHoldingThrow;
 
+    private Renderer playerRenderer; // Reference to the Renderer
+    public float colorChangeDuration = 0.5f; // Duration for color change
+
     void Start()
     {
         gameManager = FindObjectOfType<GameMan>();
         health_current = health_max;
         playerScaleStart = transform.localScale;
+        playerRenderer = GetComponent<Renderer>(); // Get the Renderer component
     }
+
     void Update()
     {
         // Handle movement input
@@ -114,6 +115,7 @@ public class Player : MonoBehaviour
             ShowPathPrediction();
         }
     }
+
     void FixedUpdate()
     {
         if (!isKnockedBack)
@@ -191,13 +193,13 @@ public class Player : MonoBehaviour
     public void Attack()
     {
         if (hasSword)
-        {        // Detect enemies in range of attack
+        {
+            // Detect enemies in range of attack
             sword.gameObject.SetActive(true);
-
+            swordAnimator.SetTrigger("Attack");
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, Hitable);
 
-            //sword.LeanRotate(new Vector3(0, 0, 270), 0.5f).setEaseOutExpo().setFrom(new Vector3(0, 0, 350));
-            sword.LeanMoveLocal(new Vector2(0.3f, sword.transform.localPosition.y), 0.2f).setFrom(new Vector3(0.1f, -0.18f, 0)).setEaseOutExpo();
+            //sword.LeanMoveLocal(new Vector2(0.3f, sword.transform.localPosition.y), 0.2f).setFrom(new Vector3(0.1f, -0.18f, 0)).setEaseOutExpo();
             // Damage them
             foreach (Collider2D enemy in hitEnemies)
             {
@@ -224,14 +226,24 @@ public class Player : MonoBehaviour
             health_current = health_max;
         }
     }
+
     public void MaxHealPlayer()
     {
         health_current = health_max;
     }
+
     public void ReduceHealth(float reduceHealthBy, Transform enemyPosition)
     {
         health_current -= reduceHealthBy;
         ApplyKnockback(enemyPosition.position, knockbackForce);
+
+        // Change color to red when taking damage
+        StartCoroutine(ChangeColor(Color.red));
+
+        if (health_current <= 0)
+        {
+            Die();
+        }
     }
 
     //-----------------
@@ -256,7 +268,7 @@ public class Player : MonoBehaviour
 
         Vector2 knockbackDirection = (transform.position - enemyPosition).normalized;
 
-        // Apply the knockback force in both horizo ntal and vertical directions
+        // Apply the knockback force in both horizontal and vertical directions
         rb.velocity = knockbackDirection * kbForce;
         StartCoroutine(KnockbackCoroutine());
     }
@@ -268,6 +280,17 @@ public class Player : MonoBehaviour
         isKnockedBack = false;
     }
     //---------------------------
+
+    // Coroutine to handle color change
+    private IEnumerator ChangeColor(Color targetColor)
+    {
+        Color originalColor = playerRenderer.material.color; // Save the original color
+        playerRenderer.material.color = targetColor; // Change to red
+
+        yield return new WaitForSeconds(colorChangeDuration); // Wait for the duration
+
+        playerRenderer.material.color = originalColor; // Change back to original color
+    }
 
     //Teleportation Ball System
 
@@ -283,11 +306,10 @@ public class Player : MonoBehaviour
         // Calculate the direction from the player to the mouse position
         Vector2 direction = (mousePosition - transform.position).normalized;
 
-        // Optionally, set a speed for the ball
-
         // Apply the force to the ball's Rigidbody2D
         rg.AddForce(direction * teleBallThrowForce, ForceMode2D.Impulse);
     }
+
     private void ShowPathPrediction()
     {
         if (pathRenderer != null)
@@ -312,7 +334,6 @@ public class Player : MonoBehaviour
         }
     }
     //---------------------------
-
 
     // Level Systems -------------------------------------
 
@@ -349,20 +370,17 @@ public class Player : MonoBehaviour
         gameManager.ResumeGame();
         Time.timeScale = 1;
         healthSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(health_max, 20);
-        print("upg");
     }
+
     public void UpgradeArmor(int points)
     {
-        // += points;
+        // Armor upgrade implementation here
         gameManager.ResumeGame();
-        print("upg");
-
     }
+
     public void UpgradeDamage(int points)
     {
         attackDamage += points;
         gameManager.ResumeGame();
-        print("upg");
-
     }
 }

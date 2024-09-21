@@ -43,7 +43,7 @@ public class EnemyPatrol : MonoBehaviour
         Vector2 knockbackDirection = (transform.position - (Vector3)attackerPosition).normalized;
 
         // Set knockback velocity
-        rb.velocity =  knockbackDirection * knockbackPower; // Adjust the multiplier for the desired knockback strength
+        rb.velocity = knockbackDirection * knockbackPower; // Adjust the multiplier for the desired knockback strength
 
         // Activate knockback state
         isKnockback = true;
