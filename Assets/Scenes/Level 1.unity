@@ -753,6 +753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  giveExp: 10
 --- !u!50 &122751478
 Rigidbody2D:
   serializedVersion: 4
@@ -6126,6 +6127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  giveExp: 10
 --- !u!50 &899369324
 Rigidbody2D:
   serializedVersion: 4
@@ -7310,8 +7312,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137.08508, y: -55.61908}
-  m_SizeDelta: {x: 217.8769, y: 60.2698}
+  m_AnchoredPosition: {x: 190.42075, y: -86.57979}
+  m_SizeDelta: {x: 324.5483, y: 122.1912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1143523120
 MonoBehaviour:
@@ -7360,8 +7362,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.6
-  m_fontSizeBase: 26.6
+  m_fontSize: 22.12
+  m_fontSizeBase: 22.12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7660,6 +7662,7 @@ MonoBehaviour:
   moveSpeed: 6.7
   jumpForce: 20
   playerLevel: 1
+  playerExp: 0
   health_max: 100
   health_current: 0
   massIncrements: 0.2
@@ -10705,7 +10708,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -10780,6 +10783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  giveExp: 10
 --- !u!50 &1603391012
 Rigidbody2D:
   serializedVersion: 4
@@ -11399,7 +11403,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -11474,6 +11478,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  giveExp: 10
 --- !u!50 &1657072151
 Rigidbody2D:
   serializedVersion: 4
@@ -13293,6 +13298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
+  giveExp: 10
 --- !u!70 &1903242736
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

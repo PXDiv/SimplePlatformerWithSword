@@ -66,7 +66,9 @@ public class EnemyPatrol : MonoBehaviour
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);
 
         // Check for wall collision
-        if (Physics2D.Raycast(transform.position, moveDirection, detectionDistance, wallLayer))
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, detectionDistance, wallLayer);
+
+        if (hit.collider != null && hit.collider.gameObject != gameObject)
         {
             // Change direction when hitting a wall
             moveDirection = -moveDirection; // Reverse direction

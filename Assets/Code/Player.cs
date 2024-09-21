@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 1f;
     public int playerLevel = 1;
-
+    public int playerExp = 0;
     public float health_max = 100, health_current;
     public float massIncrements = 1f;
 
@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         // Handle movement input
         moveInput = Input.GetAxis("Horizontal");
 
-        debugText.text = "health: " + health_current;
+        debugText.text = "health: " + health_current + " Attack: " + attackDamage + "<Br>Exp: " + playerExp + " Level: " + playerLevel;
 
         // Check if the player is grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
