@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public LayerMask groundLayer;
 
     [SerializeField] Rigidbody2D rb;
+    [SerializeField] Animator animator;
     [SerializeField] TMP_Text debugText;
     [SerializeField] GameObject sword;
 
@@ -129,6 +130,15 @@ public class Player : MonoBehaviour
                 transform.localScale = new Vector2(1 * playerScaleStart.x, transform.localScale.y);
             }
 
+            if (moveInput != 0)
+            {
+                animator.SetBool("isMoving", true);
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
+
             // Limit horizontal speed if necessary
             rb.velocity = new Vector2(Mathf.Clamp(horizontalForce, -moveSpeed, moveSpeed), rb.velocity.y);
 
@@ -155,6 +165,7 @@ public class Player : MonoBehaviour
     {
         if (isGrounded)
         {
+            animator.SetTrigger("Jump");
             rb.gravityScale = 1;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             isJumping = false;
@@ -162,6 +173,7 @@ public class Player : MonoBehaviour
         }
         else if (canDoubleJump && !doubleJumpEnabled) // Double jump logic
         {
+            animator.SetTrigger("Jump");
             rb.gravityScale = 1;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             doubleJumpEnabled = true; // Mark double jump as used
