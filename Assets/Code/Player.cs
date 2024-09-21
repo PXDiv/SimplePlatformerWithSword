@@ -4,16 +4,20 @@ using UnityEngine;
 using TMPro;
 using Unity.Mathematics;
 using System;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     // Variables for movement
     public float moveSpeed = 5f;
     public float jumpForce = 1f;
+
+    // Player Variables 
     public int playerLevel = 1;
     public int playerExp = 0;
     public float health_max = 100, health_current;
     public float massIncrements = 1f;
+    const int StartAttackDamage = 10;
 
     // Ground detection
     public Transform groundCheck;
@@ -40,7 +44,7 @@ public class Player : MonoBehaviour
     public bool doubleJumpEnabled = false; // Has the player used the double jump
 
     public float teleBallThrowForce = 10f; // Adjust the force as needed
-    public float teleportDelay = 1f;
+    public float teleportDelay = 0.5f;
     [SerializeField] GameObject teleBall;
 
     public LineRenderer pathRenderer; // Line renderer to visualize the path
@@ -59,6 +63,9 @@ public class Player : MonoBehaviour
         moveInput = Input.GetAxis("Horizontal");
 
         debugText.text = "health: " + health_current + " Attack: " + attackDamage + "<Br>Exp: " + playerExp + " Level: " + playerLevel;
+
+        healthSlider.value = health_current;
+        healthSlider.maxValue = health_max;
 
         // Check if the player is grounded
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
@@ -167,30 +174,55 @@ public class Player : MonoBehaviour
     [SerializeField] Transform attackPoint;
     public float attackDamage;
     public float knockBackOnFire = 1;
+    public bool hasSword = false;
 
     public void Attack()
     {
-        // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, Hitable);
+        if (hasSword)
+        {        // Detect enemies in range of attack
+            sword.gameObject.SetActive(true);
 
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, Hitable);
 
-        //sword.LeanRotate(new Vector3(0, 0, 270), 0.5f).setEaseOutExpo().setFrom(new Vector3(0, 0, 350));
-        sword.LeanMoveLocal(new Vector2(0.3f, sword.transform.localPosition.y), 0.2f).setFrom(new Vector3(0.1f, -0.18f, 0)).setEaseOutExpo();
-        // Damage them
-        foreach (Collider2D enemy in hitEnemies)
+            //sword.LeanRotate(new Vector3(0, 0, 270), 0.5f).setEaseOutExpo().setFrom(new Vector3(0, 0, 350));
+            sword.LeanMoveLocal(new Vector2(0.3f, sword.transform.localPosition.y), 0.2f).setFrom(new Vector3(0.1f, -0.18f, 0)).setEaseOutExpo();
+            // Damage them
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<BasicEnemyHealth>().TakeDamage(attackDamage, transform.position);
+                ApplyKnockback(attackPoint.position, knockBackOnFire);
+            }
+        }
+        else
         {
-            enemy.GetComponent<BasicEnemyHealth>().TakeDamage(attackDamage, transform.position);
-            ApplyKnockback(attackPoint.position, knockBackOnFire);
+            sword.gameObject.SetActive(false);
         }
     }
 
     //-----------------
 
-    public void reduceHealth(float reduceHealthBy, Transform enemyPosition)
+    //Health Functions
+    [SerializeField] Slider healthSlider;
+    public void HealPlayer(int points)
+    {
+        health_current += points;
+
+        if (health_current > health_max)
+        {
+            health_current = health_max;
+        }
+    }
+    public void MaxHealPlayer()
+    {
+        health_current = health_max;
+    }
+    public void ReduceHealth(float reduceHealthBy, Transform enemyPosition)
     {
         health_current -= reduceHealthBy;
         ApplyKnockback(enemyPosition.position, knockbackForce);
     }
+
+    //-----------------
 
     public void Die()
     {
@@ -212,7 +244,7 @@ public class Player : MonoBehaviour
 
         Vector2 knockbackDirection = (transform.position - enemyPosition).normalized;
 
-        // Apply the knockback force in both horizontal and vertical directions
+        // Apply the knockback force in both horizo ntal and vertical directions
         rb.velocity = knockbackDirection * kbForce;
         StartCoroutine(KnockbackCoroutine());
     }
@@ -273,6 +305,7 @@ public class Player : MonoBehaviour
     // Level Systems -------------------------------------
 
     public int[] xpForNextLevel;
+    [SerializeField] GameObject upgradesPanel;
     public void GainExperience(int exp)
     {
         playerExp += exp;
@@ -291,8 +324,33 @@ public class Player : MonoBehaviour
 
     private void OnLevelUp()
     {
-        throw new NotImplementedException();
+        upgradesPanel.SetActive(true);
     }
 
     //---------------------------------------------
+    // Upgrade Systems -------------------------------------
+
+    public void UpgradeMaxHealth(int points)
+    {
+        health_current += points;
+        health_max += points;
+        gameManager.ResumeGame();
+        Time.timeScale = 1;
+        healthSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(health_max, 20);
+        print("upg");
+    }
+    public void UpgradeArmor(int points)
+    {
+        // += points;
+        gameManager.ResumeGame();
+        print("upg");
+
+    }
+    public void UpgradeDamage(int points)
+    {
+        attackDamage += points;
+        gameManager.ResumeGame();
+        print("upg");
+
+    }
 }

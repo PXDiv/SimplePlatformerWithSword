@@ -10,7 +10,7 @@ public class PlayerDamageOnTouch : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             // Deal damage to the player
-            other.gameObject.GetComponent<Player>().reduceHealth(enemyTouchDamage, transform);
+            other.gameObject.GetComponent<Player>().ReduceHealth(enemyTouchDamage, transform);
         }
     }
 }

@@ -29,7 +29,7 @@ public class BasicEnemyHealth : MonoBehaviour
 
     public void GiveExp()
     {
-        FindObjectOfType<Player>().playerExp += giveExp;
+        FindObjectOfType<Player>().GainExperience(giveExp);
     }
 
     // Method to handle enemy death
