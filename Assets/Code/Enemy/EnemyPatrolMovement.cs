@@ -4,11 +4,12 @@ using UnityEngine;
 public class EnemyPatrol : MonoBehaviour
 {
     public float moveSpeed = 2f; // Speed of the enemy
+    //public int moveDir = 1; 
     public float detectionDistance = 0.5f; // Distance to detect walls
     public LayerMask wallLayer; // Layer mask for wall detection
 
     private Rigidbody2D rb; // Reference to Rigidbody2D
-    private Vector2 moveDirection = Vector2.right; // Initial move direction
+    public Vector2 moveDirection = Vector2.right; // Initial move direction
 
     [SerializeField] BasicEnemyHealth healthSystem; // Reference to health system
 
@@ -42,7 +43,7 @@ public class EnemyPatrol : MonoBehaviour
         Vector2 knockbackDirection = (transform.position - (Vector3)attackerPosition).normalized;
 
         // Set knockback velocity
-        rb.velocity = knockbackDirection * knockbackPower; // Adjust the multiplier for the desired knockback strength
+        rb.velocity =  knockbackDirection * knockbackPower; // Adjust the multiplier for the desired knockback strength
 
         // Activate knockback state
         isKnockback = true;
