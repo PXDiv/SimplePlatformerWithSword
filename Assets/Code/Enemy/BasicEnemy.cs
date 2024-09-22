@@ -11,6 +11,7 @@ public class BasicEnemyHealth : MonoBehaviour
 
     private Renderer enemyRenderer; // Reference to the Renderer
     private Collider2D enemyCollider; // Reference to the Collider
+    public Boss boss;
 
     // Delegate for the damage event
     public delegate void DamageEventHandler(float damageAmount, Vector2 attackerPosition);
@@ -20,6 +21,14 @@ public class BasicEnemyHealth : MonoBehaviour
     {
         enemyRenderer = GetComponent<Renderer>(); // Get the Renderer component
         enemyCollider = GetComponent<Collider2D>(); // Get the Collider component
+        if (GetComponent<Boss>() != null)
+        { boss = GetComponent<Boss>(); }
+
+        // Subscribe the boss to the damage event
+        if (boss != null)
+        {
+            OnDamageTaken += boss.OnDamageTaken;
+        }
     }
 
     public void TakeDamage(float damageAmount, Vector2 attackerPosition)
