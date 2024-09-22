@@ -1225,7 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb8588e255295c0488dcb1a2b20b5b6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 2000
+  health: 1000
   giveExp: 500
   colorChangeDuration: 0.2
   deathEffect: {fileID: 0}
@@ -1301,8 +1301,8 @@ MonoBehaviour:
   shower: {fileID: 1513687780}
   animator: {fileID: 1019447746}
   stage1Health: 70
-  stage2Health: 1400
-  stage3Health: 700
+  stage2Health: 700
+  stage3Health: 450
 --- !u!70 &1019447748
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

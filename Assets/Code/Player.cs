@@ -48,7 +48,9 @@ public class Player : MonoBehaviour
     // Double jump variables
     public bool canDoubleJump = false; // Can the player double jump
     public bool doubleJumpEnabled = false; // Has the player used the double jump
+    public bool doubleJumpAquired = false;
 
+    public bool aquiredTeleball = false;
     public float teleBallThrowForce = 10f; // Adjust the force as needed
     public float teleportDelay = 0.5f;
     [SerializeField] GameObject teleBall;
@@ -110,13 +112,13 @@ public class Player : MonoBehaviour
             Attack();
         }
 
-        if (Input.GetButtonDown("Fire2")) // Right mouse button pressed
+        if (Input.GetButtonDown("Fire2") && aquiredTeleball) // Right mouse button pressed
         {
             isHoldingThrow = true;
             Time.timeScale = 0.3f; // Slow down time
         }
 
-        if (Input.GetButtonUp("Fire2")) // Right mouse button released
+        if (Input.GetButtonUp("Fire2") && aquiredTeleball) // Right mouse button released
         {
             isHoldingThrow = false;
             Time.timeScale = 1f; // Restore time scale
@@ -125,7 +127,7 @@ public class Player : MonoBehaviour
         }
 
         // If holding the throw button, show the path prediction
-        if (isHoldingThrow)
+        if (isHoldingThrow && aquiredTeleball)
         {
             ShowPathPrediction();
         }
@@ -189,7 +191,7 @@ public class Player : MonoBehaviour
             isJumping = false;
             canDoubleJump = true; // Allow double jump after the first jump
         }
-        else if (canDoubleJump && !doubleJumpEnabled) // Double jump logic
+        else if (canDoubleJump && !doubleJumpEnabled && doubleJumpAquired) // Double jump logic
         {
             animator.SetTrigger("Jump");
             rb.gravityScale = 1;
