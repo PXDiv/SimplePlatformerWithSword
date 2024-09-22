@@ -10,7 +10,7 @@ public class Buttons : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject == player && !isTriggered)  // Check if the player touches the button
+        if (other.gameObject.CompareTag("Player") && !isTriggered)  // Check if the player touches the button
         {
             isTriggered = true;
             onButtonPressed.Invoke();  // Invoke the events linked to this button

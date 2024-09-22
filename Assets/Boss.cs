@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour
 {
@@ -39,6 +40,10 @@ public class Boss : MonoBehaviour
         }
         animator.SetInteger("Stage", current_stage);
 
+        if (healthScr.health < 00)
+        {
+            animator.SetBool("BossDead", true);
+        }
     }
 
     public void LookAtPlayer()
@@ -102,5 +107,16 @@ public class Boss : MonoBehaviour
     {
         animator.SetInteger("Stage", current_stage);
 
+    }
+
+    public void BosaDead()
+    {
+        StartCoroutine(DeadBoss());
+    }
+
+    IEnumerator DeadBoss()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(3);
     }
 }

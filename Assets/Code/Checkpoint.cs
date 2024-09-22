@@ -9,7 +9,7 @@ public class Checkpoint : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             PlayerPrefs.SetFloat("cpx", transform.position.x);
-            PlayerPrefs.SetFloat("cpy", transform.position.x);
+            PlayerPrefs.SetFloat("cpy", transform.position.y);
 
             print("Player Checkpoint Set to: x" + PlayerPrefs.GetFloat("cpx") + ", " + PlayerPrefs.GetFloat("cpy"));
         }

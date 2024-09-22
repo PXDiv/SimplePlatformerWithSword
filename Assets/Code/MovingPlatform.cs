@@ -10,8 +10,6 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 previousPosition;
     private Rigidbody2D playerRigidbody;
 
-    public string title;
-    public string message;
 
     void Start()
     {
@@ -61,7 +59,6 @@ public class MovingPlatform : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             playerRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
-            FindObjectOfType<MessagePanel>().SendMessage(title, message);
         }
     }
 

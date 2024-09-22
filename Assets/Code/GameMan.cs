@@ -34,4 +34,15 @@ public class GameMan : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    public void ChangeLevel(int index)
+    {
+        SceneManager.LoadScene(index);
+
+    }
+
+    public void QuitGame()
+    {
+
+    }
 }

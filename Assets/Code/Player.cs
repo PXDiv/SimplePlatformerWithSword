@@ -68,6 +68,7 @@ public class Player : MonoBehaviour
         health_current = health_max;
         playerScaleStart = transform.localScale;
         playerRenderer = GetComponent<Renderer>(); // Get the Renderer component
+
     }
 
     void Update()
@@ -75,7 +76,7 @@ public class Player : MonoBehaviour
         // Handle movement input
         moveInput = Input.GetAxis("Horizontal");
 
-        debugText.text = "health: " + health_current + " Attack: " + attackDamage + "<Br>Exp: " + playerExp + " Level: " + playerLevel;
+        debugText.text = "Health: " + health_current + "/" + health_max + " Attack: " + attackDamage + "<Br>Exp: " + playerExp + " Level: " + playerLevel;
 
         healthSlider.value = health_current;
         healthSlider.maxValue = health_max;
@@ -268,7 +269,7 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
-        gameManager.RestartLevel();
+        transform.position = new Vector2(PlayerPrefs.GetFloat("cpx"), PlayerPrefs.GetFloat("cpy"));
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -408,6 +409,7 @@ public class Player : MonoBehaviour
 
     public void UpgradeMaxHealth(int points)
     {
+        print("max health upgraded");
         health_current += points;
         health_max += points;
         gameManager.ResumeGame();
