@@ -17,6 +17,8 @@ public class ChasingEnemy : MonoBehaviour
     private Transform player; // Reference to the player
     private bool isChasing = false; // Flag to check if enemy is chasing
 
+    public Vector2 startScale;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Get the Rigidbody2D component
@@ -30,6 +32,7 @@ public class ChasingEnemy : MonoBehaviour
         // Find the player in the scene (assuming there's only one player tagged "Player")
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
+        startScale = transform.localScale;
         // Subscribe to the OnDamageTaken event
         if (healthSystem != null)
         {
@@ -93,11 +96,11 @@ public class ChasingEnemy : MonoBehaviour
     {
         if (direction > 0)
         {
-            transform.localScale = new Vector3(1, transform.localScale.y, transform.localScale.z); // Face right
+            transform.localScale = new Vector3(1 * startScale.x, transform.localScale.y, transform.localScale.z); // Face right
         }
         else if (direction < 0)
         {
-            transform.localScale = new Vector3(-1, transform.localScale.y, transform.localScale.z); // Face left
+            transform.localScale = new Vector3(-1 * startScale.x, transform.localScale.y, transform.localScale.z); // Face left
         }
     }
 

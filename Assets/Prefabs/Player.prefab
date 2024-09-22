@@ -169,7 +169,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 82.41, y: 15.62, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.35, y: 1.35, z: 1.35}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4920739266464272088}
@@ -245,7 +245,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d7cd82a766e1fad46b549b8b6672b74f, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -303,8 +303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af3f4de1226ee3f489d755b0e25ad19e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 7
-  jumpForce: 15
+  moveSpeed: 8
+  jumpForce: 25
   playerLevel: 1
   playerExp: 0
   health_max: 100
@@ -314,18 +314,22 @@ MonoBehaviour:
   groundCheckRadius: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   rb: {fileID: 3735472606818948525}
   animator: {fileID: 369387604804936568}
   swordAnimator: {fileID: 3826510495842927888}
   debugText: {fileID: 0}
   sword: {fileID: 1937658195980094228}
-  knockbackForce: 10
+  dashSpeed: 40
+  dashDuration: 0.2
+  dashCooldown: 0.5
+  aquiredDash: 1
+  knockbackForce: 30
   knockbackDuration: 0.2
   canDoubleJump: 0
   doubleJumpEnabled: 0
   teleBallThrowForce: 17
-  teleportDelay: 1
+  teleportDelay: 0.4
   teleBall: {fileID: 7756434896712442713, guid: 26354cadff0f60b4285e19ba87aeb180, type: 3}
   pathRenderer: {fileID: 5668502161194350433}
   pathTime: 2

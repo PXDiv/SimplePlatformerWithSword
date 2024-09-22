@@ -26,6 +26,15 @@ public class Player : MonoBehaviour
     [SerializeField] TMP_Text debugText;
     [SerializeField] GameObject sword;
 
+    // Dash variables
+    public float dashSpeed = 10f; // Speed during the dash
+    public float dashDuration = 0.2f; // How long the dash lasts
+    public float dashCooldown = 1f; // Time before the player can dash again
+    public bool aquiredDash = true;
+    private bool isDashing = false;
+    private bool canDash = true; // Whether the player can dash
+
+
     private bool isGrounded;
     private bool isJumping;
     private float moveInput;
@@ -85,9 +94,15 @@ public class Player : MonoBehaviour
         }
 
         // Handle jump input
-        if (Input.GetButtonDown("Jump") && !isKnockedBack)
+        if (Input.GetButtonDown("Jump") && !isKnockedBack && !isDashing)
         {
             Jump();
+        }
+
+        // Handle dash input
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canDash && !isDashing && !isKnockedBack)
+        {
+            StartCoroutine(Dash());
         }
 
         if (Input.GetButtonDown("Fire1")) // Attack
@@ -116,9 +131,10 @@ public class Player : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
-        if (!isKnockedBack)
+        if (!isKnockedBack && !isDashing)
         {
             float horizontalForce = moveInput * moveSpeed;
 
@@ -186,7 +202,7 @@ public class Player : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask Hitable;
     [SerializeField] Transform attackPoint;
-    public float attackDamage;
+    public int attackDamage;
     public float knockBackOnFire = 1;
     public bool hasSword = false;
 
@@ -290,6 +306,31 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(colorChangeDuration); // Wait for the duration
 
         playerRenderer.material.color = originalColor; // Change back to original color
+    }
+
+    // Dash
+    IEnumerator Dash()
+    {
+        if (aquiredDash)
+        {
+            canDash = false;
+            isDashing = true;
+
+            float originalGravity = rb.gravityScale; // Save original gravity scale
+            rb.gravityScale = 0; // Disable gravity during dash
+
+            Vector2 dashDirection = new Vector2(transform.localScale.x, 0).normalized;
+            rb.velocity = dashDirection * dashSpeed; // Apply dash velocity
+
+            yield return new WaitForSeconds(dashDuration); // Wait for dash duration
+
+            rb.gravityScale = originalGravity; // Restore gravity scale
+            isDashing = false;
+
+            yield return new WaitForSeconds(dashCooldown); // Wait for cooldown
+
+            canDash = true;
+        }
     }
 
     //Teleportation Ball System
