@@ -2,6 +2,8 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +16,7 @@ public class Player : MonoBehaviour
     public int playerExp = 0;
     public float health_max = 100, health_current;
     public float massIncrements = 1f;
+    public float maxGravity = 20;
     const int StartAttackDamage = 10;
 
     // Ground detection
@@ -23,7 +26,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Animator animator, swordAnimator;
-    [SerializeField] TMP_Text debugText;
+    [SerializeField] TMP_Text healthText, AttackText;
     [SerializeField] GameObject sword;
 
     // Dash variables
@@ -55,6 +58,7 @@ public class Player : MonoBehaviour
     public float teleportDelay = 0.5f;
     [SerializeField] GameObject teleBall;
 
+
     public LineRenderer pathRenderer; // Line renderer to visualize the path
     public float pathTime = 2f; // Duration for the path prediction
     private bool isHoldingThrow;
@@ -62,13 +66,18 @@ public class Player : MonoBehaviour
     private Renderer playerRenderer; // Reference to the Renderer
     public float colorChangeDuration = 0.5f; // Duration for color change
 
+    [SerializeField] GameObject gameOverPanel;
     void Start()
     {
+        LoadStatus();
         gameManager = FindObjectOfType<GameMan>();
         health_current = health_max;
         playerScaleStart = transform.localScale;
         playerRenderer = GetComponent<Renderer>(); // Get the Renderer component
-
+        if (!hasSword)
+        {
+            sword.SetActive(false);
+        }
     }
 
     void Update()
@@ -76,7 +85,8 @@ public class Player : MonoBehaviour
         // Handle movement input
         moveInput = Input.GetAxis("Horizontal");
 
-        debugText.text = "Health: " + health_current + "/" + health_max + " Attack: " + attackDamage + "<Br>Exp: " + playerExp + " Level: " + playerLevel;
+        healthText.text = health_current + "/" + health_max;
+        AttackText.text = attackDamage.ToString();
 
         healthSlider.value = health_current;
         healthSlider.maxValue = health_max;
@@ -163,7 +173,7 @@ public class Player : MonoBehaviour
             // Limit horizontal speed if necessary
             rb.velocity = new Vector2(Mathf.Clamp(horizontalForce, -moveSpeed, moveSpeed), rb.velocity.y);
 
-            if (!isGrounded)
+            if (!isGrounded && rb.gravityScale < maxGravity)
             {
                 rb.gravityScale += massIncrements;
             }
@@ -269,7 +279,19 @@ public class Player : MonoBehaviour
 
     public void Die()
     {
+        RespawnFromCheckpoint();
+        if (SceneManager.GetActiveScene().buildIndex == 2)
+        {
+            gameOverPanel.SetActive(true);
+        }
+    }
+
+    public void RespawnFromCheckpoint()
+    {
+        print("Reswpawn");
+        health_current = health_max;
         transform.position = new Vector2(PlayerPrefs.GetFloat("cpx"), PlayerPrefs.GetFloat("cpy"));
+
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -415,6 +437,7 @@ public class Player : MonoBehaviour
         gameManager.ResumeGame();
         Time.timeScale = 1;
         healthSlider.GetComponent<RectTransform>().sizeDelta = new Vector2(health_max, 20);
+        SaveStatus();
     }
 
     public void UpgradeArmor(int points)
@@ -427,5 +450,26 @@ public class Player : MonoBehaviour
     {
         attackDamage += points;
         gameManager.ResumeGame();
+        SaveStatus();
+
+    }
+
+    public void SaveStatus()
+    {
+        PlayerPrefs.SetInt("AttackDamage", attackDamage);
+        PlayerPrefs.SetFloat("Health", health_max);
+        PlayerPrefs.SetInt("Level", playerLevel);
+    }
+
+    public void LoadStatus()
+    {
+        attackDamage = PlayerPrefs.GetInt("AttackDamage", 10);
+        if (PlayerPrefs.GetFloat("Health", 100) < 99)
+        {
+            PlayerPrefs.SetFloat("Health", 100);
+        }
+        health_max = PlayerPrefs.GetFloat("Health", 100);
+        playerLevel = PlayerPrefs.GetInt("Level", 1);
+
     }
 }

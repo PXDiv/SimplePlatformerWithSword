@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BasicEnemyHealth : MonoBehaviour
@@ -67,6 +68,11 @@ public class BasicEnemyHealth : MonoBehaviour
     // Method to handle enemy death
     void Die()
     {
+
+        if (boss != null)
+        {
+            return;
+        }
         enemyCollider.enabled = false;
         enemyRenderer.enabled = false;
         // Play death particle effect

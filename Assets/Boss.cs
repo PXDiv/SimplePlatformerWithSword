@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
+using TMPro;
 public class Boss : MonoBehaviour
 {
     [SerializeField] BasicEnemyHealth healthScr;
@@ -17,15 +18,22 @@ public class Boss : MonoBehaviour
     [SerializeField] Animator animator;
     byte current_stage = 1;
     public int stage1Health, stage2Health, stage3Health;
+    [SerializeField] Slider bossHealthBar;
+    [SerializeField] TMP_Text bossHealthText;
+    [SerializeField] float maxHealth;
 
     void Start()
     {
         player = FindObjectOfType<Player>().transform;
-
+        maxHealth = healthScr.health;
     }
 
     private void Update()
     {
+
+        bossHealthBar.value = healthScr.health;
+        bossHealthText.text = healthScr.health + "/" + maxHealth;
+
         // Example: The boss could react to damage here
 
         if (healthScr.health < stage2Health && healthScr.health > stage3Health)
@@ -40,7 +48,7 @@ public class Boss : MonoBehaviour
         }
         animator.SetInteger("Stage", current_stage);
 
-        if (healthScr.health < 00)
+        if (healthScr.health <= 00)
         {
             animator.SetBool("BossDead", true);
         }
@@ -109,7 +117,7 @@ public class Boss : MonoBehaviour
 
     }
 
-    public void BosaDead()
+    public void BossDead()
     {
         StartCoroutine(DeadBoss());
     }

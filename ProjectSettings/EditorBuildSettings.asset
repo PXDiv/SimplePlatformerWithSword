@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BossFIght1.unity
     guid: 23f8e4218b8e10844a506758610fa352
+  - enabled: 1
+    path: Assets/Scenes/Completed.unity
+    guid: ca926dd58337b284ca92b14bbc7ec0cc
   m_configObjects: {}
